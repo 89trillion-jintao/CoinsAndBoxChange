@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 /**
@@ -9,19 +10,31 @@ using UnityEngine.UI;
  */
 public class CreateCoins : MonoBehaviour
 {
+    private static CreateCoins createCoins;
     // 父节点
     [SerializeField] private RectTransform ParentTrans;
     // 开箱图片
     [SerializeField] private GameObject openBox;
     // 关箱动画 
     [SerializeField] private GameObject closedBox;
+    //最终位置
+    public RectTransform endTransform;
     // 金币数量文本
-    [SerializeField] private Text moneyTxt;
+    public Text moneyTxt;
+    public int sumOfMoney;
 
     //根据点击次数生成不同数量的金币预制件
     private int clickCount = 0;
     private int money = 0;
 
+    private void Awake()
+    {
+        createCoins = this;
+    }
+    public static CreateCoins GetInstance()
+    {
+        return createCoins;
+    }
     //按钮点击函数
     public void OnClick()
     {
@@ -32,7 +45,6 @@ public class CreateCoins : MonoBehaviour
             clickCount = 3;
         }
         //金钱数改变
-        IncreaseMoney();
         BoxAni();
         for (int i = 0; i < clickCount * 5; i++)
         {
@@ -65,10 +77,5 @@ public class CreateCoins : MonoBehaviour
             closedBox.SetActive(true);
         }
     }
-    //计算金币增加的数量
-    private void IncreaseMoney()
-    {
-        money += clickCount * 5;
-        moneyTxt.text = "" + money;
-    }
+    
 }
